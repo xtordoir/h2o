@@ -1,0 +1,380 @@
+{
+  "metadata" : {
+    "name" : "GetStarted",
+    "user_save_timestamp" : "1970-01-01T01:00:00.000Z",
+    "auto_save_timestamp" : "1970-01-01T01:00:00.000Z",
+    "language_info" : {
+      "name" : "scala",
+      "file_extension" : "scala",
+      "codemirror_mode" : "text/x-scala"
+    },
+    "trusted" : true,
+    "customLocalRepo" : null,
+    "customRepos" : null,
+    "customDeps" : [ "ai.h2o % sparkling-water-core_2.10 % 1.5.3", "- com.google.guava % guava %16.0.1", "- log4j % log4j % 1.2.15", "- org.apache.hadoop % hadoop-client %   _", "- org.apache.spark  % spark-core_2.10    %   _", "- org.apache.spark  % spark-sql_2.10    %   _", "- org.apache.spark % spark-mllib_2.10 % _", "- org.apache.spark % spark-repl_2.10 % _", "- org.scala-lang    %     _         %   _", "- org.scoverage     %     _         %   _" ],
+    "customImports" : null,
+    "customArgs" : null,
+    "customSparkConf" : null
+  },
+  "cells" : [ {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "import water.parser._\nimport hex.FrameSplitter\nimport water.Key\nimport org.apache.spark.h2o.H2OContext",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "import water.parser._\nimport hex.FrameSplitter\nimport water.Key\nimport org.apache.spark.h2o.H2OContext\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 2
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "import org.apache.spark.rdd.RDD\nval sqlContext = new org.apache.spark.sql.SQLContext(sparkContext)\nimport sqlContext.implicits._\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.Row",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "import org.apache.spark.rdd.RDD\nsqlContext: org.apache.spark.sql.SQLContext = org.apache.spark.sql.SQLContext@6f0a05c9\nimport sqlContext.implicits._\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.Row\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 3
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "<console>:71: error: missing arguments for method hex in object functions;\nfollow this method with `_' if you want to treat it as a partially applied function\n       import hex.FrameSplitter\n              ^\n"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "import org.apache.spark.h2o.H2OContext",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "import org.apache.spark.h2o.H2OContext\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 4
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val h2oContext = new H2OContext(sparkContext).start()",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "h2oContext: org.apache.spark.h2o.H2OContext = \n\nSparkling Water Context:\n * number of executors: 1\n * list of used executors:\n  (executorId, host, port)\n  ------------------------\n  (driver,10.0.1.5,54321)\n  ------------------------\n\n  Open H2O Flow in browser: http://10.0.1.5:54321 (CMD + click in Mac OSX)\n    \n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "\nSparkling Water Context:\n * number of executors: 1\n * list of used executors:\n  (executorId, host, port)\n  ------------------------\n  (driver,10.0.1.5,54321)\n  ------------------------\n\n  Open H2O Flow in browser: http://10.0.1.5:54321 (CMD + click in Mac OSX)\n    "
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 5
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "<console>:69: error: missing arguments for method broadcast in class SparkContext;\nfollow this method with `_' if you want to treat it as a partially applied function\n              sparkContext.broadcast\n                           ^\n"
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "object serctx extends java.io.Serializable {\n case class MyCase(x: Double, i: Int, c: String) extends java.io.Serializable\n}\nimport serctx._",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "defined module serctx\nimport serctx._\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : ""
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 6
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val df = globalScope.sparkContext.parallelize( (1 to 100).map(i => MyCase(i*1.0, i, i.toString)) ).toDF()",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "warning: there were 1 feature warning(s); re-run with -feature for details\ndf: org.apache.spark.sql.DataFrame = [x: double, i: int, c: string]\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "<div class=\"df-canvas\">\n      <script data-this=\"{&quot;dataId&quot;:&quot;anond3af09a7493fcc9a136068d9fd5e4d93&quot;,&quot;partitionIndexId&quot;:&quot;anonca75f9b472af21f1f2040166fa26ae80&quot;,&quot;numPartitions&quot;:4,&quot;dfSchema&quot;:{&quot;type&quot;:&quot;struct&quot;,&quot;fields&quot;:[{&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;double&quot;,&quot;nullable&quot;:false,&quot;metadata&quot;:{}},{&quot;name&quot;:&quot;i&quot;,&quot;type&quot;:&quot;integer&quot;,&quot;nullable&quot;:false,&quot;metadata&quot;:{}},{&quot;name&quot;:&quot;c&quot;,&quot;type&quot;:&quot;string&quot;,&quot;nullable&quot;:true,&quot;metadata&quot;:{}}]}}\" type=\"text/x-scoped-javascript\">/*<![CDATA[*/req(['../javascripts/notebook/dataframe','../javascripts/notebook/consoleDir'], \n      function(dataframe, extension) {\n        dataframe.call(data, this, extension);\n      }\n    );/*]]>*/</script>\n      <link rel=\"stylesheet\" href=\"/assets/stylesheets/ipython/css/dataframe.css\" type=\"text/css\"/>\n    </div>"
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 7
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "",
+    "outputs" : [ {
+      "ename" : "Error",
+      "output_type" : "error",
+      "traceback" : [ "Incomplete (hint: check the parenthesis)" ]
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "//import h2oContext._\n",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "hdf: water.Key[org.apache.spark.h2o.Frame] = frame_rdd_6\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "frame_rdd_6"
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 9
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val hf = h2oContext.asH2OFrame(df)",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "hf: org.apache.spark.h2o.H2OFrame = \nFrame frame_rdd_6 (100 rows and 3 cols):\n           x    i   c\n    min    1    1    \n   mean   50   50    \n stddev   29   29    \n    max  100  100    \nmissing    0    0    \n      0    1    1   1\n      1    2    2   2\n      2    3    3   3\n      3    4    4   4\n      4    5    5   5\n      5    6    6   6\n      6    7    7   7\n      7    8    8   8\n      8    9    9   9\n      9   10   10  10\n     10   11   11  11\n     11   12   12  12\n     12   13   13  13\n     13   14   14  14\n     14   15   15  15\n     15   16   16  16\n     16   17   17  17\n     17   18   18  18\n     18   19   19  19\n     19   20   20  20\n\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "Frame frame_rdd_6 (100 rows and 3 cols):\n           x    i   c\n    min    1    1    \n   mean   50   50    \n stddev   29   29    \n    max  100  100    \nmissing    0    0    \n      0    1    1   1\n      1    2    2   2\n      2    3    3   3\n      3    4    4   4\n      4    5    5   5\n      5    6    6   6\n      6    7    7   7\n      7    8    8   8\n      8    9    9   9\n      9   10   10  10\n     10   11   11  11\n     11   12   12  12\n     12   13   13  13\n     13   14   14  14\n     14   15   15  15\n     15   16   16  16\n     16   17   17  17\n     17   18   18  18\n     18   19   19  19\n     19   20   20  20\n"
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 8
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "hdf.toJsonString",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "res4: String = {\"name\":\"frame_rdd_6\",\"type\":\"Key\"}\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "{&quot;name&quot;:&quot;frame_rdd_6&quot;,&quot;type&quot;:&quot;Key&quot;}"
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 12
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "hdf.get",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "res8: org.apache.spark.h2o.Frame = \nFrame frame_rdd_6 (100 rows and 3 cols):\n           x    i   c\n    min    1    1    \n   mean   50   50    \n stddev   29   29    \n    max  100  100    \nmissing    0    0    \n      0    1    1   1\n      1    2    2   2\n      2    3    3   3\n      3    4    4   4\n      4    5    5   5\n      5    6    6   6\n      6    7    7   7\n      7    8    8   8\n      8    9    9   9\n      9   10   10  10\n     10   11   11  11\n     11   12   12  12\n     12   13   13  13\n     13   14   14  14\n     14   15   15  15\n     15   16   16  16\n     16   17   17  17\n     17   18   18  18\n     18   19   19  19\n     19   20   20  20\n\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "Frame frame_rdd_6 (100 rows and 3 cols):\n           x    i   c\n    min    1    1    \n   mean   50   50    \n stddev   29   29    \n    max  100  100    \nmissing    0    0    \n      0    1    1   1\n      1    2    2   2\n      2    3    3   3\n      3    4    4   4\n      4    5    5   5\n      5    6    6   6\n      6    7    7   7\n      7    8    8   8\n      8    9    9   9\n      9   10   10  10\n     10   11   11  11\n     11   12   12  12\n     12   13   13  13\n     13   14   14  14\n     14   15   15  15\n     15   16   16  16\n     16   17   17  17\n     17   18   18  18\n     18   19   19  19\n     19   20   20  20\n"
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 16
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "import scala.collection.JavaConverters._\nval arr: Array[water.Key[water.fvec.Frame]] = Array(\"training\", \"test\", \"validation\").map(s => Key.make[water.fvec.Frame](s))\n\n",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "import scala.collection.JavaConverters._\narr: Array[water.Key[water.fvec.Frame]] = Array(training, test, validation)\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "<span style=\"color:red;\">Ooops, exception in the cell: </span>"
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 20
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "Key.make[water.fvec.Frame](\"hello\")",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "res7: water.Key[water.fvec.Frame] = hello\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "hello"
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 19
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val frameSplitter = new FrameSplitter(hf, Array(.5, .3), arr, null)",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "frameSplitter: hex.FrameSplitter = hex.FrameSplitter@39470a8d\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "hex.FrameSplitter@39470a8d"
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 21
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "    water.H2O.submitTask(frameSplitter)\n    val splits = frameSplitter.getResult\n    val training = splits(0)\n    val validation = splits(2)",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "splits: Array[water.fvec.Frame] = \nArray(Frame training (50 rows and 3 cols):\n          x   i   c\n    min   1   1    \n   mean  25  25    \n stddev  14  14    \n    max  50  50    \nmissing   0   0    \n      0   1   1   1\n      1   2   2   2\n      2   3   3   3\n      3   4   4   4\n      4   5   5   5\n      5   6   6   6\n      6   7   7   7\n      7   8   8   8\n      8   9   9   9\n      9  10  10  10\n     10  11  11  11\n     11  12  12  12\n     12  13  13  13\n     13  14  14  14\n     14  15  15  15\n     15  16  16  16\n     16  17  17  17\n     17  18  18  18\n     18  19  19  19\n     19  20  20  20\n, Frame test (30 rows and 3 cols):\n          x   i   c\n    min  51  51    \n   mean  65  65    \n stddev   8   8    \n    max  80  80    \nmissing   0   0    \n      0  51  51  51\n      1  52  52  52\n    ..."
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "Frame validation (20 rows and 3 cols):\n           x    i    c\n    min   81   81     \n   mean   90   90     \n stddev    5    5     \n    max  100  100     \nmissing    0    0     \n      0   81   81   81\n      1   82   82   82\n      2   83   83   83\n      3   84   84   84\n      4   85   85   85\n      5   86   86   86\n      6   87   87   87\n      7   88   88   88\n      8   89   89   89\n      9   90   90   90\n     10   91   91   91\n     11   92   92   92\n     12   93   93   93\n     13   94   94   94\n     14   95   95   95\n     15   96   96   96\n     16   97   97   97\n     17   98   98   98\n     18   99   99   99\n     19  100  100  100\n"
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 22
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "training",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "res9: water.fvec.Frame = \nFrame training (50 rows and 3 cols):\n          x   i   c\n    min   1   1    \n   mean  25  25    \n stddev  14  14    \n    max  50  50    \nmissing   0   0    \n      0   1   1   1\n      1   2   2   2\n      2   3   3   3\n      3   4   4   4\n      4   5   5   5\n      5   6   6   6\n      6   7   7   7\n      7   8   8   8\n      8   9   9   9\n      9  10  10  10\n     10  11  11  11\n     11  12  12  12\n     12  13  13  13\n     13  14  14  14\n     14  15  15  15\n     15  16  16  16\n     16  17  17  17\n     17  18  18  18\n     18  19  19  19\n     19  20  20  20\n\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "Frame training (50 rows and 3 cols):\n          x   i   c\n    min   1   1    \n   mean  25  25    \n stddev  14  14    \n    max  50  50    \nmissing   0   0    \n      0   1   1   1\n      1   2   2   2\n      2   3   3   3\n      3   4   4   4\n      4   5   5   5\n      5   6   6   6\n      6   7   7   7\n      7   8   8   8\n      8   9   9   9\n      9  10  10  10\n     10  11  11  11\n     11  12  12  12\n     12  13  13  13\n     13  14  14  14\n     14  15  15  15\n     15  16  16  16\n     16  17  17  17\n     17  18  18  18\n     18  19  19  19\n     19  20  20  20\n"
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 24
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "Array(\"training\", \"test\", \"validation\").map(s => Key.make(s))",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "res5: Array[water.Key[Nothing]] = Array(training, test, validation)\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "<span style=\"color:red;\">Ooops, exception in the cell: </span>"
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 15
+    } ]
+  } ],
+  "nbformat" : 4
+}
