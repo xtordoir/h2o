@@ -1,6 +1,6 @@
 {
   "metadata" : {
-    "name" : "GetStarted",
+    "name" : "PopulationStratification",
     "user_save_timestamp" : "1970-01-01T01:00:00.000Z",
     "auto_save_timestamp" : "1970-01-01T01:00:00.000Z",
     "language_info" : {
@@ -9,18 +9,35 @@
       "codemirror_mode" : "text/x-scala"
     },
     "trusted" : true,
-    "customLocalRepo" : null,
+    "customLocalRepo" : "/Users/xavier/.m2/repository",
     "customRepos" : null,
-    "customDeps" : [ "ai.h2o % sparkling-water-core_2.10 % 1.5.3", "- com.google.guava % guava %16.0.1", "- log4j % log4j % 1.2.15", "- org.apache.hadoop % hadoop-client %   _", "- org.apache.spark  % spark-core_2.10    %   _", "- org.apache.spark  % spark-sql_2.10    %   _", "- org.apache.spark % spark-mllib_2.10 % _", "- org.apache.spark % spark-repl_2.10 % _", "- org.scala-lang    %     _         %   _", "- org.scoverage     %     _         %   _" ],
+    "customDeps" : [ "ai.h2o % sparkling-water-core_2.10 % 1.5.3", "ai.h2o % h2o-algos % 3.4.0.1", "org.bdgenomics.adam % adam-core % 0.16.0", "- com.google.guava % guava %16.0.1", "- log4j % log4j % 1.2.15", "- org.apache.hadoop % hadoop-client %   _", "- org.apache.spark  % spark-core_2.10    %   _", "- org.apache.spark  % spark-sql_2.10    %   _", "- org.apache.spark % spark-mllib_2.10 % _", "- org.apache.spark % spark-repl_2.10 % _", "- org.scala-lang    %     _         %   _", "- org.scoverage     %     _         %   _" ],
     "customImports" : null,
     "customArgs" : null,
     "customSparkConf" : null
   },
   "cells" : [ {
+    "metadata" : { },
+    "cell_type" : "markdown",
+    "source" : "## Import bunch of dependencies"
+  }, {
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
+    },
+    "cell_type" : "code",
+    "source" : "import hex.FrameSplitter\nimport hex.deeplearning.DeepLearning\nimport hex.deeplearning.DeepLearningParameters\nimport hex.deeplearning.DeepLearningParameters.Activation\nimport org.apache.spark.{SparkConf, SparkContext}\nimport org.apache.spark.SparkContext.rddToPairRDDFunctions\nimport org.apache.spark.h2o.H2OContext\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.sql._\nimport org.bdgenomics.adam.rdd.ADAMContext._\nimport org.bdgenomics.formats.avro.{Genotype, GenotypeAllele}\nimport water.Key\n\nimport scala.collection.JavaConverters._\nimport scala.collection.immutable.Range.inclusive\nimport scala.io.Source\n",
+    "outputs" : [ ]
+  }, {
+    "metadata" : { },
+    "cell_type" : "markdown",
+    "source" : "#### REMOVE"
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : true
     },
     "cell_type" : "code",
     "source" : "import water.parser._\nimport hex.FrameSplitter\nimport water.Key\nimport org.apache.spark.h2o.H2OContext",
@@ -29,16 +46,16 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
     },
     "cell_type" : "code",
-    "source" : "import org.apache.spark.rdd.RDD\nval sqlContext = new org.apache.spark.sql.SQLContext(sparkContext)\nimport sqlContext.implicits._\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.Row",
+    "source" : "val sqlContext = new org.apache.spark.sql.SQLContext(sparkContext)\n\nimport sqlContext.implicits._\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.Row",
     "outputs" : [ ]
   }, {
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
     },
     "cell_type" : "code",
     "source" : "import org.apache.spark.h2o.H2OContext",
@@ -47,7 +64,7 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
     },
     "cell_type" : "code",
     "source" : "val h2oContext = new H2OContext(sparkContext).start()",
@@ -56,7 +73,7 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
     },
     "cell_type" : "code",
     "source" : "object serctx extends java.io.Serializable {\n case class MyCase(x: Double, i: Int, c: String) extends java.io.Serializable\n}\nimport serctx._",
@@ -65,7 +82,7 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
     },
     "cell_type" : "code",
     "source" : "val df = globalScope.sparkContext.parallelize( (1 to 100).map(i => MyCase(i*1.0, i, i.toString)) ).toDF()",
@@ -74,7 +91,7 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
     },
     "cell_type" : "code",
     "source" : "val hf = h2oContext.asH2OFrame(df)",
@@ -83,7 +100,7 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
     },
     "cell_type" : "code",
     "source" : "hf.toJsonString",
@@ -92,7 +109,7 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
     },
     "cell_type" : "code",
     "source" : "import scala.collection.JavaConverters._\nval arr: Array[water.Key[water.fvec.Frame]] = Array(\"training\", \"test\", \"validation\").map(s => Key.make[water.fvec.Frame](s))\n\n",
@@ -101,7 +118,7 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
     },
     "cell_type" : "code",
     "source" : "Key.make[water.fvec.Frame](\"hello\")",
@@ -110,7 +127,7 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
     },
     "cell_type" : "code",
     "source" : "val frameSplitter = new FrameSplitter(hf, Array(.5, .3), arr, null)",
@@ -119,7 +136,7 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
     },
     "cell_type" : "code",
     "source" : "    water.H2O.submitTask(frameSplitter)\n    val splits = frameSplitter.getResult\n    val training = splits(0)\n    val validation = splits(2)",
@@ -128,7 +145,7 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
     },
     "cell_type" : "code",
     "source" : "training",
@@ -137,7 +154,7 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : false
+      "collapsed" : true
     },
     "cell_type" : "code",
     "source" : "Array(\"training\", \"test\", \"validation\").map(s => Key.make(s))",
