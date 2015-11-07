@@ -11,7 +11,7 @@
     "trusted" : true,
     "customLocalRepo" : "/Users/xavier/.m2/repository",
     "customRepos" : null,
-    "customDeps" : [ "ai.h2o % sparkling-water-core_2.10 % 1.5.3", "ai.h2o % h2o-algos % 3.4.0.1", "org.bdgenomics.adam % adam-core % 0.16.0", "- com.google.guava % guava %16.0.1", "- log4j % log4j % 1.2.15", "- org.apache.hadoop % hadoop-client %   _", "- org.apache.spark  % spark-core_2.10    %   _", "- org.apache.spark  % spark-sql_2.10    %   _", "- org.apache.spark % spark-mllib_2.10 % _", "- org.apache.spark % spark-repl_2.10 % _", "- org.scala-lang    %     _         %   _", "- org.scoverage     %     _         %   _" ],
+    "customDeps" : [ "ai.h2o % sparkling-water-core_2.10 % 1.3.7", "ai.h2o % h2o-algos % 3.0.0.26", "org.bdgenomics.adam % adam-core % 0.16.0", "org.scala-lang % jline % 2.10.4", "- com.google.guava % guava %16.0.1", "- log4j % log4j % 1.2.15", "- org.apache.hadoop % hadoop-client %   _", "- org.apache.spark  % spark-core_2.10    %   _", "- org.apache.spark % spark-mllib_2.10 % _", "- org.apache.spark % spark-repl_2.10 % _", "- org.scala-lang    %     _         %   _", "- org.scoverage     %     _         %   _" ],
     "customImports" : null,
     "customArgs" : null,
     "customSparkConf" : null
@@ -24,23 +24,68 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : true
+      "collapsed" : false
     },
     "cell_type" : "code",
-    "source" : "import hex.FrameSplitter\nimport hex.deeplearning.DeepLearning\nimport hex.deeplearning.DeepLearningParameters\nimport hex.deeplearning.DeepLearningParameters.Activation\nimport org.apache.spark.{SparkConf, SparkContext}\nimport org.apache.spark.SparkContext.rddToPairRDDFunctions\nimport org.apache.spark.h2o.H2OContext\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.sql._\nimport org.bdgenomics.adam.rdd.ADAMContext._\nimport org.bdgenomics.formats.avro.{Genotype, GenotypeAllele}\nimport water.Key\n\nimport scala.collection.JavaConverters._\nimport scala.collection.immutable.Range.inclusive\nimport scala.io.Source\n",
+    "source" : "import hex.FrameSplitter\nimport hex.deeplearning.DeepLearning\nimport hex.deeplearning.DeepLearningParameters\nimport hex.deeplearning.DeepLearningParameters.Activation\nimport org.apache.spark.{SparkConf, SparkContext}\nimport org.apache.spark.SparkContext.rddToPairRDDFunctions\nimport org.apache.spark.h2o.H2OContext\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.sql._\nimport org.apache.spark.sql.types._\nimport org.bdgenomics.adam.rdd.ADAMContext._\nimport org.bdgenomics.formats.avro.{Genotype, GenotypeAllele}\nimport water.Key\n\nimport scala.collection.JavaConverters._\nimport scala.collection.immutable.Range.inclusive\nimport scala.io.Source\n",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val genotypeFile = \"/Users/xavier/data/chr22-16m-18m.adam\"",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val allGenotypes: RDD[Genotype] = sc.loadGenotypes(genotypeFile)",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val snpgts = allGenotypes.filter{g => \n               val bases = Set(\"A\",\"T\",\"G\",\"C\")\n               bases.contains(g.getVariant.getReferenceAllele) && \n                                      bases.contains(g.getVariant.getAlternateAllele)\n          }",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val pops = Set(\"GBR\", \"ASW\", \"CHB\")",
     "outputs" : [ ]
   }, {
     "metadata" : { },
     "cell_type" : "markdown",
-    "source" : "#### REMOVE"
+    "source" : "### Get the populations"
   }, {
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : true
+      "collapsed" : false
     },
     "cell_type" : "code",
-    "source" : "import water.parser._\nimport hex.FrameSplitter\nimport water.Key\nimport org.apache.spark.h2o.H2OContext",
+    "source" : "import sys.process._",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val panelFile = \"/Users/xavier/data/ALL.panel\"",
     "outputs" : [ ]
   }, {
     "metadata" : {
@@ -49,7 +94,115 @@
       "collapsed" : true
     },
     "cell_type" : "code",
-    "source" : "val sqlContext = new org.apache.spark.sql.SQLContext(sparkContext)\n\nimport sqlContext.implicits._\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.Row",
+    "source" : "s\"wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel -O ${panelFile}\"!!",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "import scala.io.Source\ndef extract(filter: (String, String) => Boolean= (s, t) => true) = Source.fromFile(panelFile).getLines().map( line => {\n  val toks = line.split(\"\\t\").toList\n  toks(0) -> toks(1)\n}).toMap.filter( tup => filter(tup._1, tup._2) )\n  \n// panel extract from file, filtering by the 2 populations\ndef panel: Map[String,String] = \n  extract((sampleID: String, pop: String) => pops.contains(pop)) \n  \n// broadcast the panel \nval bPanel = sparkContext.broadcast(panel)\n()",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val finalGts = snpgts.filter(g =>  bPanel.value.contains(g.getSampleId))",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "case class SampleVariant(sampleId: String, variantId: Int, alternateCount: Int) ",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "//case class SampleVariant(sampleId: String, variantId: Int, alternateCount: Int) \n\n\ndef variantId(genotype: Genotype): String = {\n      val name = genotype.getVariant.getContig.getContigName\n      val start = genotype.getVariant.getStart\n      val end = genotype.getVariant.getEnd\n      s\"$name:$start:$end\"\n    }\ndef alternateCount(genotype: Genotype): Int = {\n  genotype.getAlleles.asScala.count(_ != GenotypeAllele.Ref)\n}\n    def toVariant(genotype: Genotype): SampleVariant = {\n      // Intern sample IDs as they will be repeated a lot\n      new SampleVariant(genotype.getSampleId.intern(), variantId(genotype).hashCode(), alternateCount(genotype))\n    }\n",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val variantsRDD: RDD[SampleVariant] = finalGts.map(toVariant)",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val variantsBySampleId: RDD[(String, Iterable[SampleVariant])] = variantsRDD.groupBy{v: SampleVariant => v.sampleId}\nval sampleCount: Long = variantsBySampleId.count()\nprintln(\"Found \" + sampleCount + \" samples\")\nval variantsByVariantId: RDD[(Int, Iterable[SampleVariant])] = variantsRDD.groupBy(_.variantId).filter {\n  case (_, sampleVariants) => sampleVariants.size == sampleCount\n}",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "    val variantFrequencies: collection.Map[Int, Int] = variantsByVariantId.map {\n      case (variantId, sampleVariants) => (variantId, sampleVariants.count(_.alternateCount > 0))\n    }.collectAsMap()\n    val permittedRange = inclusive(11, 11)\n    val filteredVariantsBySampleId: RDD[(String, Iterable[SampleVariant])] = variantsBySampleId.map {\n      case (sampleId, sampleVariants) =>\n        val filteredSampleVariants = sampleVariants.filter(variant => permittedRange.contains(\n          variantFrequencies.getOrElse(variant.variantId, -1)))\n        (sampleId, filteredSampleVariants)\n    }",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "    val sortedVariantsBySampleId: RDD[(String, Array[SampleVariant])] = filteredVariantsBySampleId.map {\n      case (sampleId, variants) =>\n        (sampleId, variants.toArray.sortBy(_.variantId))\n    }",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "import org.apache.spark.sql.types._\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.Row\n",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val sqlContext = new org.apache.spark.sql.SQLContext(sc)\nimport sqlContext.implicits._",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val popToInt = Map(\"GBR\" -> 0, \"CHB\" -> 1, \"ASW\" -> 2, \"Unknown\" -> -1)\n\nval header = StructType(Array(StructField(\"Region\", StringType)) ++\n      sortedVariantsBySampleId.first()._2.map(variant => {StructField(variant.variantId.toString, IntegerType)}))\nval rowRDD: RDD[Row] = sortedVariantsBySampleId.map {\n    case (sampleId, sortedVariants) =>\n      val region: Array[String] = Array(panel.getOrElse(sampleId, \"Unknown\"))\n      val alternateCounts: Array[Int] = sortedVariants.map(_.alternateCount)\n      Row.fromSeq(region ++ alternateCounts)\n}\n",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val df = sqlContext.createDataFrame(rowRDD, header)\n()",
     "outputs" : [ ]
   }, {
     "metadata" : {
@@ -58,7 +211,7 @@
       "collapsed" : true
     },
     "cell_type" : "code",
-    "source" : "import org.apache.spark.h2o.H2OContext",
+    "source" : "df.write.save(\"/Users/xavier/data/df.parquet\")",
     "outputs" : [ ]
   }, {
     "metadata" : {
@@ -67,31 +220,31 @@
       "collapsed" : true
     },
     "cell_type" : "code",
-    "source" : "val h2oContext = new H2OContext(sparkContext).start()",
+    "source" : "df.show",
     "outputs" : [ ]
   }, {
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : true
+      "collapsed" : false
     },
     "cell_type" : "code",
-    "source" : "object serctx extends java.io.Serializable {\n case class MyCase(x: Double, i: Int, c: String) extends java.io.Serializable\n}\nimport serctx._",
+    "source" : "val h2oContext = new H2OContext(sc).start()\n",
     "outputs" : [ ]
   }, {
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : true
+      "collapsed" : false
     },
     "cell_type" : "code",
-    "source" : "val df = globalScope.sparkContext.parallelize( (1 to 100).map(i => MyCase(i*1.0, i, i.toString)) ).toDF()",
+    "source" : "h2oContext.openFlow()",
     "outputs" : [ ]
   }, {
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : true
+      "collapsed" : false
     },
     "cell_type" : "code",
     "source" : "val hf = h2oContext.asH2OFrame(df)",
@@ -100,10 +253,91 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : true
+      "collapsed" : false
     },
     "cell_type" : "code",
-    "source" : "hf.toJsonString",
+    "source" : "import scala.collection.JavaConverters._\nval keyarr= Array(\"training\", \"test\", \"validation\").map(s => Key.make(s))\nval frameSplitter = new FrameSplitter(hf, Array(.5, .3), keyarr, null)",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "/* for h2o 3.2 ? */\n//import scala.collection.JavaConverters._\n//val arr = \n//         Array(\"training\", \"test\", \"validation\").map(s => Key.make[water.fvec.Frame](s))\n//val frameSplitter = new FrameSplitter(hf, Array(.5, .3), arr, null)",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "water.H2O.submitTask(frameSplitter)\nval splits = frameSplitter.getResult\nval training = splits(0)\nval validation = splits(2)",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val deepLearningParameters = new DeepLearningParameters()",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "deepLearningParameters._train = training._key",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "deepLearningParameters._valid = validation._key\ndeepLearningParameters._response_column = \"Region\"\ndeepLearningParameters._epochs = 10\ndeepLearningParameters._activation = Activation.RectifierWithDropout\ndeepLearningParameters._hidden = Array[Int](100,100)",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val deepLearning = new DeepLearning(deepLearningParameters)",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val deepLearningModel = deepLearning.trainModel.get",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "val scores = deepLearningModel.score(validation)",
+    "outputs" : [ ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
+    "source" : "h2oContext.asDataFrame(new water.fvec.H2OFrame(scores))(sqlContext)",
     "outputs" : [ ]
   }, {
     "metadata" : {
@@ -112,52 +346,7 @@
       "collapsed" : true
     },
     "cell_type" : "code",
-    "source" : "import scala.collection.JavaConverters._\nval arr: Array[water.Key[water.fvec.Frame]] = Array(\"training\", \"test\", \"validation\").map(s => Key.make[water.fvec.Frame](s))\n\n",
-    "outputs" : [ ]
-  }, {
-    "metadata" : {
-      "trusted" : true,
-      "input_collapsed" : false,
-      "collapsed" : true
-    },
-    "cell_type" : "code",
-    "source" : "Key.make[water.fvec.Frame](\"hello\")",
-    "outputs" : [ ]
-  }, {
-    "metadata" : {
-      "trusted" : true,
-      "input_collapsed" : false,
-      "collapsed" : true
-    },
-    "cell_type" : "code",
-    "source" : "val frameSplitter = new FrameSplitter(hf, Array(.5, .3), arr, null)",
-    "outputs" : [ ]
-  }, {
-    "metadata" : {
-      "trusted" : true,
-      "input_collapsed" : false,
-      "collapsed" : true
-    },
-    "cell_type" : "code",
-    "source" : "    water.H2O.submitTask(frameSplitter)\n    val splits = frameSplitter.getResult\n    val training = splits(0)\n    val validation = splits(2)",
-    "outputs" : [ ]
-  }, {
-    "metadata" : {
-      "trusted" : true,
-      "input_collapsed" : false,
-      "collapsed" : true
-    },
-    "cell_type" : "code",
-    "source" : "training",
-    "outputs" : [ ]
-  }, {
-    "metadata" : {
-      "trusted" : true,
-      "input_collapsed" : false,
-      "collapsed" : true
-    },
-    "cell_type" : "code",
-    "source" : "Array(\"training\", \"test\", \"validation\").map(s => Key.make(s))",
+    "source" : "",
     "outputs" : [ ]
   } ],
   "nbformat" : 4
