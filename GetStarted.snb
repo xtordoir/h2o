@@ -9,12 +9,14 @@
       "codemirror_mode" : "text/x-scala"
     },
     "trusted" : true,
-    "customLocalRepo" : "/Users/xavier/.m2/repository",
+    "customLocalRepo" : "/root/.m2/repository",
     "customRepos" : null,
-    "customDeps" : [ "ai.h2o % sparkling-water-core_2.10 % 1.3.7", "ai.h2o % h2o-algos % 3.0.0.26", "org.bdgenomics.adam % adam-core % 0.16.0", "org.scala-lang % jline % 2.10.4", "- com.google.guava % guava %16.0.1", "- log4j % log4j % 1.2.15", "- org.apache.hadoop % hadoop-client %   _", "- org.apache.spark  % spark-core_2.10    %   _", "- org.apache.spark % spark-mllib_2.10 % _", "- org.apache.spark % spark-repl_2.10 % _", "- org.scala-lang    %     _         %   _", "- org.scoverage     %     _         %   _" ],
+    "customDeps" : [ "ai.h2o % sparkling-water-core_2.10 % 1.3.7", "ai.h2o % h2o-algos % 3.0.0.26", "org.bdgenomics.adam % adam-core % 0.16.0", "org.scala-lang % jline % 2.10.4", "- log4j % log4j % 1.2.15", "- org.apache.hadoop % hadoop-client %   _", "- org.apache.spark  % spark-core_2.10    %   _", "- org.apache.spark % spark-mllib_2.10 % _", "- org.apache.spark % spark-repl_2.10 % _", "- org.scala-lang    %     _         %   _", "- org.scoverage     %     _         %   _" ],
     "customImports" : null,
     "customArgs" : null,
-    "customSparkConf" : null
+    "customSparkConf" : {
+      "spark.executor.memory" : "13g"
+    }
   },
   "cells" : [ {
     "metadata" : {
@@ -47,7 +49,7 @@
     "outputs" : [ {
       "name" : "stdout",
       "output_type" : "stream",
-      "text" : "import org.apache.spark.rdd.RDD\nsqlContext: org.apache.spark.sql.SQLContext = org.apache.spark.sql.SQLContext@772e002\nimport sqlContext.implicits._\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.Row\n"
+      "text" : "import org.apache.spark.rdd.RDD\nsqlContext: org.apache.spark.sql.SQLContext = org.apache.spark.sql.SQLContext@79f24a12\nimport sqlContext.implicits._\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.Row\n"
     }, {
       "metadata" : { },
       "data" : {
@@ -83,15 +85,35 @@
       "collapsed" : false
     },
     "cell_type" : "code",
+    "source" : "water.H2O.CLOUD.size()",
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "res2: Int = 0\n"
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "0"
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 5
+    } ]
+  }, {
+    "metadata" : {
+      "trusted" : true,
+      "input_collapsed" : false,
+      "collapsed" : false
+    },
+    "cell_type" : "code",
     "source" : "val h2oContext = new H2OContext(sparkContext).start()",
     "outputs" : [ {
       "name" : "stdout",
       "output_type" : "stream",
-      "text" : "h2oContext: org.apache.spark.h2o.H2OContext = \n\nSparkling Water Context:\n * number of executors: 1\n * list of used executors:\n  (executorId, host, port)\n  ------------------------\n  (<driver>,10.0.1.23,54321)\n  ------------------------\n\n  Open H2O Flow in browser: http://10.0.1.23:54321 (CMD + click in Mac OSX)\n    \n"
+      "text" : "h2oContext: org.apache.spark.h2o.H2OContext = \n\nSparkling Water Context:\n * number of executors: 3\n * list of used executors:\n  (executorId, host, port)\n  ------------------------\n  (0,ip-10-184-0-223.eu-west-1.compute.internal,54321)\n  (2,ip-10-184-2-40.eu-west-1.compute.internal,54321)\n  (1,ip-10-9-2-31.eu-west-1.compute.internal,54321)\n  ------------------------\n\n  Open H2O Flow in browser: http://10.13.12.179:54321 (CMD + click in Mac OSX)\n    \n"
     }, {
       "metadata" : { },
       "data" : {
-        "text/html" : "\nSparkling Water Context:\n * number of executors: 1\n * list of used executors:\n  (executorId, host, port)\n  ------------------------\n  (&lt;driver&gt;,10.0.1.23,54321)\n  ------------------------\n\n  Open H2O Flow in browser: http://10.0.1.23:54321 (CMD + click in Mac OSX)\n    "
+        "text/html" : "\nSparkling Water Context:\n * number of executors: 3\n * list of used executors:\n  (executorId, host, port)\n  ------------------------\n  (0,ip-10-184-0-223.eu-west-1.compute.internal,54321)\n  (2,ip-10-184-2-40.eu-west-1.compute.internal,54321)\n  (1,ip-10-9-2-31.eu-west-1.compute.internal,54321)\n  ------------------------\n\n  Open H2O Flow in browser: http://10.13.12.179:54321 (CMD + click in Mac OSX)\n    "
       },
       "output_type" : "execute_result",
       "execution_count" : 4
@@ -147,7 +169,7 @@
         "text/html" : ""
       },
       "output_type" : "execute_result",
-      "execution_count" : 8
+      "execution_count" : 5
     } ]
   }, {
     "metadata" : {
@@ -164,10 +186,10 @@
     }, {
       "metadata" : { },
       "data" : {
-        "text/html" : "<div class=\"df-canvas\">\n      <script data-this=\"{&quot;dataId&quot;:&quot;anon39b3f570326ed967e637c60d66b21832&quot;,&quot;partitionIndexId&quot;:&quot;anon638653c5a8f734669419a9eeb1a913d7&quot;,&quot;numPartitions&quot;:4,&quot;dfSchema&quot;:{&quot;type&quot;:&quot;struct&quot;,&quot;fields&quot;:[{&quot;name&quot;:&quot;x&quot;,&quot;type&quot;:&quot;double&quot;,&quot;nullable&quot;:false,&quot;metadata&quot;:{}},{&quot;name&quot;:&quot;i&quot;,&quot;type&quot;:&quot;integer&quot;,&quot;nullable&quot;:false,&quot;metadata&quot;:{}},{&quot;name&quot;:&quot;c&quot;,&quot;type&quot;:&quot;string&quot;,&quot;nullable&quot;:true,&quot;metadata&quot;:{}}]}}\" type=\"text/x-scoped-javascript\">/*<![CDATA[*/req(['../javascripts/notebook/dataframe','../javascripts/notebook/consoleDir'], \n      function(dataframe, extension) {\n        dataframe.call(data, this, extension);\n      }\n    );/*]]>*/</script>\n      <link rel=\"stylesheet\" href=\"/assets/stylesheets/ipython/css/dataframe.css\" type=\"text/css\"/>\n    </div>"
+        "text/html" : ""
       },
       "output_type" : "execute_result",
-      "execution_count" : 9
+      "execution_count" : 6
     } ]
   }, {
     "metadata" : {
@@ -180,14 +202,14 @@
     "outputs" : [ {
       "name" : "stdout",
       "output_type" : "stream",
-      "text" : "hf: org.apache.spark.h2o.H2OFrame = \nFrame frame_rdd_10 (100 rows and 3 cols):\n           x    i   c\n    min    1    1    \n   mean   50   50    \n stddev   29   29    \n    max  100  100    \nmissing    0    0    \n      0    1    1   1\n      1    2    2   2\n      2    3    3   3\n      3    4    4   4\n      4    5    5   5\n      5    6    6   6\n      6    7    7   7\n      7    8    8   8\n      8    9    9   9\n      9   10   10  10\n     10   11   11  11\n     11   12   12  12\n     12   13   13  13\n     13   14   14  14\n     14   15   15  15\n     15   16   16  16\n     16   17   17  17\n     17   18   18  18\n     18   19   19  19\n     19   20   20  20\n\n"
+      "text" : "hf: org.apache.spark.h2o.H2OFrame = \nFrame frame_rdd_6 (100 rows and 3 cols):\n           x    i   c\n    min    1    1    \n   mean   50   50    \n stddev   29   29    \n    max  100  100    \nmissing    0    0    \n      0    1    1   1\n      1    2    2   2\n      2    3    3   3\n      3    4    4   4\n      4    5    5   5\n      5    6    6   6\n      6    7    7   7\n      7    8    8   8\n      8    9    9   9\n      9   10   10  10\n     10   11   11  11\n     11   12   12  12\n     12   13   13  13\n     13   14   14  14\n     14   15   15  15\n     15   16   16  16\n     16   17   17  17\n     17   18   18  18\n     18   19   19  19\n     19   20   20  20\n\n"
     }, {
       "metadata" : { },
       "data" : {
-        "text/html" : "Frame frame_rdd_10 (100 rows and 3 cols):\n           x    i   c\n    min    1    1    \n   mean   50   50    \n stddev   29   29    \n    max  100  100    \nmissing    0    0    \n      0    1    1   1\n      1    2    2   2\n      2    3    3   3\n      3    4    4   4\n      4    5    5   5\n      5    6    6   6\n      6    7    7   7\n      7    8    8   8\n      8    9    9   9\n      9   10   10  10\n     10   11   11  11\n     11   12   12  12\n     12   13   13  13\n     13   14   14  14\n     14   15   15  15\n     15   16   16  16\n     16   17   17  17\n     17   18   18  18\n     18   19   19  19\n     19   20   20  20\n"
+        "text/html" : "Frame frame_rdd_6 (100 rows and 3 cols):\n           x    i   c\n    min    1    1    \n   mean   50   50    \n stddev   29   29    \n    max  100  100    \nmissing    0    0    \n      0    1    1   1\n      1    2    2   2\n      2    3    3   3\n      3    4    4   4\n      4    5    5   5\n      5    6    6   6\n      6    7    7   7\n      7    8    8   8\n      8    9    9   9\n      9   10   10  10\n     10   11   11  11\n     11   12   12  12\n     12   13   13  13\n     13   14   14  14\n     14   15   15  15\n     15   16   16  16\n     16   17   17  17\n     17   18   18  18\n     18   19   19  19\n     19   20   20  20\n"
       },
       "output_type" : "execute_result",
-      "execution_count" : 10
+      "execution_count" : 7
     } ]
   }, {
     "metadata" : {
@@ -200,14 +222,14 @@
     "outputs" : [ {
       "name" : "stdout",
       "output_type" : "stream",
-      "text" : "frameSplitter: hex.FrameSplitter = hex.FrameSplitter@e9ef4ec\n"
+      "text" : "frameSplitter: hex.FrameSplitter = hex.FrameSplitter@bb7d63f\n"
     }, {
       "metadata" : { },
       "data" : {
-        "text/html" : "hex.FrameSplitter@e9ef4ec"
+        "text/html" : "hex.FrameSplitter@bb7d63f"
       },
       "output_type" : "execute_result",
-      "execution_count" : 12
+      "execution_count" : 10
     } ]
   }, {
     "metadata" : {
@@ -220,7 +242,7 @@
     "outputs" : [ {
       "name" : "stdout",
       "output_type" : "stream",
-      "text" : "<console>:70: error: overloaded method value make with alternatives:\n  (x$1: Byte,x$2: Byte,x$3: Boolean,x$4: <repeated...>[water.H2ONode])water.Key[_ <: water.Keyed[_ <: AnyRef]] <and>\n  (x$1: String,x$2: Byte,x$3: Byte,x$4: Boolean,x$5: <repeated...>[water.H2ONode])water.Key[_ <: water.Keyed[_ <: AnyRef]] <and>\n  ()water.Key[_ <: water.Keyed[_ <: AnyRef]] <and>\n  (x$1: water.H2ONode)water.Key[_ <: water.Keyed[_ <: AnyRef]] <and>\n  (x$1: String)water.Key[_ <: water.Keyed[_ <: AnyRef]] <and>\n  (x$1: Array[Byte])water.Key[_ <: water.Keyed[_ <: AnyRef]]\n does not take type parameters\n       val arr: Array[water.Key[water.fvec.Frame]] = Array(\"training\", \"test\", \"validation\").map(s => Key.make[water.fvec.Frame](s))\n                                                                                                          ^\n"
+      "text" : "<console>:65: error: overloaded method value make with alternatives:\n  (x$1: Byte,x$2: Byte,x$3: Boolean,x$4: <repeated...>[water.H2ONode])water.Key[_ <: water.Keyed[_ <: AnyRef]] <and>\n  (x$1: String,x$2: Byte,x$3: Byte,x$4: Boolean,x$5: <repeated...>[water.H2ONode])water.Key[_ <: water.Keyed[_ <: AnyRef]] <and>\n  ()water.Key[_ <: water.Keyed[_ <: AnyRef]] <and>\n  (x$1: water.H2ONode)water.Key[_ <: water.Keyed[_ <: AnyRef]] <and>\n  (x$1: String)water.Key[_ <: water.Keyed[_ <: AnyRef]] <and>\n  (x$1: Array[Byte])water.Key[_ <: water.Keyed[_ <: AnyRef]]\n does not take type parameters\n       val arr: Array[water.Key[water.fvec.Frame]] = Array(\"training\", \"test\", \"validation\").map(s => Key.make[water.fvec.Frame](s))\n                                                                                                          ^\n"
     } ]
   }, {
     "metadata" : {
@@ -248,11 +270,22 @@
     "metadata" : {
       "trusted" : true,
       "input_collapsed" : false,
-      "collapsed" : true
+      "collapsed" : false
     },
     "cell_type" : "code",
     "source" : "    water.H2O.submitTask(frameSplitter)\n    val splits = frameSplitter.getResult\n    val training = splits(0)\n    val validation = splits(2)",
-    "outputs" : [ ]
+    "outputs" : [ {
+      "name" : "stdout",
+      "output_type" : "stream",
+      "text" : "splits: Array[water.fvec.Frame] = \nArray(Frame training (50 rows and 3 cols):\n          x   i   c\n    min   1   1    \n   mean  25  25    \n stddev  14  14    \n    max  50  50    \nmissing   0   0    \n      0   1   1   1\n      1   2   2   2\n      2   3   3   3\n      3   4   4   4\n      4   5   5   5\n      5   6   6   6\n      6   7   7   7\n      7   8   8   8\n      8   9   9   9\n      9  10  10  10\n     10  11  11  11\n     11  12  12  12\n     12  13  13  13\n     13  14  14  14\n     14  15  15  15\n     15  16  16  16\n     16  17  17  17\n     17  18  18  18\n     18  19  19  19\n     19  20  20  20\n, Frame test (30 rows and 3 cols):\n          x   i   c\n    min  51  51    \n   mean  65  65    \n stddev   8   8    \n    max  80  80    \nmissing   0   0    \n      0  51  51  51\n      1  52  52  52\n    ..."
+    }, {
+      "metadata" : { },
+      "data" : {
+        "text/html" : "Frame validation (20 rows and 3 cols):\n           x    i    c\n    min   81   81     \n   mean   90   90     \n stddev    5    5     \n    max  100  100     \nmissing    0    0     \n      0   81   81   81\n      1   82   82   82\n      2   83   83   83\n      3   84   84   84\n      4   85   85   85\n      5   86   86   86\n      6   87   87   87\n      7   88   88   88\n      8   89   89   89\n      9   90   90   90\n     10   91   91   91\n     11   92   92   92\n     12   93   93   93\n     13   94   94   94\n     14   95   95   95\n     15   96   96   96\n     16   97   97   97\n     17   98   98   98\n     18   99   99   99\n     19  100  100  100\n"
+      },
+      "output_type" : "execute_result",
+      "execution_count" : 11
+    } ]
   }, {
     "metadata" : {
       "trusted" : true,
